@@ -1,7 +1,21 @@
 <h1>Sign Up</h1>
 
 <%= form_for @user do |f| %>
-
+  <% if @user.errors.any? %>
+    <div class="error_messages" id="error_explanation">
+      <h2>Form is invalid</h2>
+      <ul>
+        <% for message in @user.errors.full_messages %>
+          <li><% if message == "Password digest can't be blank"%>
+          	<%= "Password can't be blank" %>
+          	<% else %>
+          	<%= message %>
+          	<% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
  <div class="field">
     <%= f.label :name %><br />
@@ -9,17 +23,17 @@
   </div>
   <div class="field">
     <%= f.label :email %><br />
-    <%= f.text_area :email %>
+    <%= f.text_field :email %>
   </div>
   <div class="field">
     <%= f.label :password %><br />
-    <%= f.text_field :password %>
+    <%= f.password_field :password %>
   </div>
   <div class="field">
-    <%= f.label :confirm_password %><br />
-    <%= f.text_field :confirm_password %>
-
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation %>
+	</div>
   <div class="actions">
     <%= f.submit %>
-
+	</div>
 <% end %>
