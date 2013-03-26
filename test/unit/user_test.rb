@@ -34,5 +34,12 @@ class UserTest < ActiveSupport::TestCase
 		assert_raises(ActiveModel::MassAssignmentSecurity::Error) {user.update_attributes(:password_digest => "djhackalkdjsfkhack")}
 	end
 
+	test "must have a password and confirmation on create" do
+		user = FactoryGirl.build(:user)
+		user.password = ""
+		user.password_confirmation =""
+		refute user.valid?
+	end
+
 
 end
