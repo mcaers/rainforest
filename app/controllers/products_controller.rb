@@ -6,11 +6,13 @@ class ProductsController < ApplicationController
 
   # GET /products/1
   def show
+    @review = Review.new
     @product = Product.find(params[:id])
   end
 
   # GET /products/new
   def new
+    @review = Review.new
     @product = Product.new
   end
 

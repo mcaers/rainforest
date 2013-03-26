@@ -1,13 +1,12 @@
 class ReviewsController < ApplicationController
-  # GET /reviews
-  # GET /reviews.json
+  before_filter :load_product
+
+
+  # GET /product/:id/reviews
+ 
   def index
     @reviews = Review.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @reviews }
-    end
+  
   end
 
   # GET /reviews/1
@@ -15,17 +14,14 @@ class ReviewsController < ApplicationController
   def show
     @review = Review.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @review }
-    end
+  
   end
 
   # GET /reviews/new
   # GET /reviews/new.json
   def new
     @review = Review.new
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @review }
@@ -37,20 +33,23 @@ class ReviewsController < ApplicationController
     @review = Review.find(params[:id])
   end
 
-  # POST /reviews
-  # POST /reviews.json
+  # POST /product/:id/reviews
   def create
-    @review = Review.new(params[:review])
+    # @review = Review.new(
+    #   :comment => params[:review][:comment], 
+    #   :product_id => @product.id, 
+    #   :user_id => current_user.id
+    #   )
+    @review = @product.reviews.build(
+      :comment => params[:review][:comment],
+      :user_id => current_user.id
+      )
 
-    respond_to do |format|
       if @review.save
-        format.html { redirect_to @review, notice: 'Review was successfully created.' }
-        format.json { render json: @review, status: :created, location: @review }
+        redirect_to @product, notice: 'Review was successfully created.'
       else
-        format.html { render action: "new" }
-        format.json { render json: @review.errors, status: :unprocessable_entity }
+        render "/products/show"
       end
-    end
   end
 
   # PUT /reviews/1
@@ -79,5 +78,9 @@ class ReviewsController < ApplicationController
       format.html { redirect_to reviews_url }
       format.json { head :no_content }
     end
+  end
+
+  def load_product
+    @product = Product.find(params[:product_id])
   end
 end
